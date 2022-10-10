@@ -1,21 +1,25 @@
-import { useState } from "react";
+// import { useState } from "react";
 
 export default function Calculator(){
 
     const numbers = ["1", "2", "3", "4", "5", "6", "7", "8", "9", "0", "."];
     const operations = ["+", "-", "*", "/", "%", "( )", "C"];
-    const [currentNumber, setCurrentNumber] = useState("")
-    const [prevNumber, setPrevNumber] = useState("")
-    // const [selectedOperation, setCurrentNumber] = useState("")
-
+    
+    const nums = []
+    const currentNumber = []
     const pressed = (value) => {
 
-        console.log(value)
+        nums.push(value);
+        const currentNumber = [...nums]
+        console.log(parseInt((currentNumber.join("").toString())))
+
+        // const displayThis = () => parseInt((currentNumber.join("").toString()))
     }
 
-    // function handleChange(e){
-    //     console.log(e)
-    // }
+    const displayThis = (e) => {
+        e.preventDefault();
+        e.target.value = parseInt((currentNumber.join("").toString()))
+    } 
 
     return(
         <section className="calculator-wrapper">
@@ -24,11 +28,13 @@ export default function Calculator(){
                 <div className="cache">
                         <h4 className="cache--text"> 222222 </h4>
                 </div>
-                <input className="cal-input" type="disabled" name="calculator-number-input" id="calculator-input" />
+                <input value="HELLO" className="cal-input" type="disabled" name="calculator-number-input" id="calculator-input" />
+                {/* <h1 className="cal-input"> {currentDisplayNum} </h1> */}
+                
             </div>
 
             <section className="calculator">
-            
+
                 <div className="buttons">
                     <button onClick={() => pressed('c')}>C</button>
                     <button onClick={() => pressed('()')}>( )</button>
@@ -54,6 +60,7 @@ export default function Calculator(){
                     <button onClick={() => pressed('0')}>0</button>
                     <button onClick={() => pressed('000')}>000</button>
                     <button onClick={() => pressed('=')}>&#61;</button> 
+
                 </div>    
             </section>
         </section>
@@ -62,3 +69,6 @@ export default function Calculator(){
     
     return <h1> HELLO WORLD</h1>
 }
+
+
+
