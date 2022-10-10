@@ -1,25 +1,31 @@
-// import { useState } from "react";
+import { useState, useEffect }from "react";
 
 export default function Calculator(){
 
     const numbers = ["1", "2", "3", "4", "5", "6", "7", "8", "9", "0", "."];
     const operations = ["+", "-", "*", "/", "%", "( )", "C"];
-    
-    const nums = []
-    const currentNumber = []
+    const [currentNum, setCurrentNum] = useState("") 
+    // const [updated, setUpdated] = useState(1)
+    // let currentNum = ""
+
+
+    // Handle Button Press
     const pressed = (value) => {
-
-        nums.push(value);
-        const currentNumber = [...nums]
-        console.log(parseInt((currentNumber.join("").toString())))
-
-        // const displayThis = () => parseInt((currentNumber.join("").toString()))
+        // console.log(value)
+        appendNumber(value);
+        // setCurrentNum(currentNum + value)
+        // setCurrentNum(prevNum => (prevNum + value))
     }
 
-    const displayThis = (e) => {
-        e.preventDefault();
-        e.target.value = parseInt((currentNumber.join("").toString()))
-    } 
+
+    // Add number to back of numbers
+    const appendNumber = (value) => {
+        // currentNum = currentNum + value;  
+        setCurrentNum(prevNum => (prevNum + value))
+        console.log(currentNum)
+    }
+
+    
 
     return(
         <section className="calculator-wrapper">
@@ -28,8 +34,7 @@ export default function Calculator(){
                 <div className="cache">
                         <h4 className="cache--text"> 222222 </h4>
                 </div>
-                <input value="HELLO" className="cal-input" type="disabled" name="calculator-number-input" id="calculator-input" />
-                {/* <h1 className="cal-input"> {currentDisplayNum} </h1> */}
+                <input onChange={e => setCurrentNum(e.target.value)} defaultValue={currentNum} className="cal-input" type="disabled" name="calculator-number-input" id="calculator-input" />
                 
             </div>
 
@@ -66,8 +71,6 @@ export default function Calculator(){
         </section>
         
     )
-    
-    return <h1> HELLO WORLD</h1>
 }
 
 
