@@ -68,9 +68,9 @@ export default function Calculator() {
       alert(`Operation ${selectedOperation} is not yet supported 🙃`);
     }
 
-    const result = operation(parseInt(prevNum), parseInt(currentNum));
+    const result = operation(parseFloat(prevNum), parseFloat(currentNum));
     setPrevNum(result);
-    setCurrentNum(result);
+    setCurrentNum(result)
   };
 
   return (
