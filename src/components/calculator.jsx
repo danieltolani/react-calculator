@@ -1,95 +1,186 @@
 import { useState, useEffect } from "react";
 
 export default function Calculator() {
-  const numbers = ["1", "2", "3", "4", "5", "6", "7", "8", "9", "0", "."];
-  const operations = ["+", "-", "*", "/", "%", "()", "C"];
   const [currentNum, setCurrentNum] = useState("");
   const [prevNum, setPrevNum] = useState("");
   const [selectedOperation, setSelectedOperation] = useState("");
-  const [history, setHistory] = useState("");
+  const [historyLog, setHistoryLog] = useState("");
 
-  useEffect(() => {
-    if (selectedOperation) {
-      return setHistory(`${prevNum} ${selectedOperation}`);
-    }
-  }, [selectedOperation, prevNum]);
-  // Handle Button Press
-  const pressed = (value) => {
-    // condition for what each button should do
+  const numbers = [
+    "1",
+    "2",
+    "3",
+    "4",
+    "5",
+    "6",
+    "7",
+    "8",
+    "9",
+    "0",
+    ".",
+    "000",
+  ];
+  const operations = ["+", "-", "*", "/", "%", "()", "c"];
 
-    if (value === "c") {
-      setCurrentNum("");
-      setHistory("")
+  // Make sure keyboard input is a number
+  // that can allow only '.' and ',' with the operations
+  const handleKeyPress = (e) => {
+    const NUMBER_DOT_COMMA = /^[\d,.*+-/%c]*$/;
+    const fieldValue = e.target.value;
+    const fieldHasCommaOrDot =
+      fieldValue.includes(".") || fieldValue.includes(",");
+    const keyIsCommaOrDot = e.key === "." || e.key === ",";
+
+    // console.log(e.key);
+    if (e.key === "c") {
+      clear();
       return;
     }
 
-    // if its an equal sign, it should run the 'calculate' function.
-    if (value === "=" || value === "Enter") {
+    if (e.key === "Enter") {
+      calculate();
+      return;
+    }
+
+    // Convert all Commas to dot
+    if (
+      !NUMBER_DOT_COMMA.test(e.key) ||
+      (keyIsCommaOrDot && fieldHasCommaOrDot)
+    )
+      e.preventDefault();
+    e.target.value = fieldValue.replace(",", ".");
+
+    // Trigger the 'apply operation' function once the user inputs an operation
+    if (operations.includes(e.key)) {
+      applyOperation(e.key);
+      return;
+    }
+
+    // e.preventDefault();
+    // console.log(operations)
+    // e.target.value = fieldValue.replace(",", ".");
+  };
+
+  const pressed = (value) => {
+    if (value === "c") {
+      return clear();
+    }
+
+    if (value === "=") {
       return calculate();
     }
 
-    // check if the input value is contained in the operations array
-    // if it does, continue to append
+    if (numbers.includes(value)) {
+      // call the append Function
+      return appendNumber(value);
+    }
+
     if (operations.includes(value)) {
       return applyOperation(value);
     }
-
-    if (numbers.includes(value)) {
-      return appendNumber(value);
-    }
   };
 
-  // Add numbers to back of number
+  const clear = () => {
+    setCurrentNum("");
+    setPrevNum("");
+    setHistoryLog("");
+    setSelectedOperation("");
+  };
+
   const appendNumber = (value) => {
-    if (selectedOperation) {
-      setCurrentNum(value);
-    } else {
-      setCurrentNum((prevNum) => prevNum + value);
-    }
+    // Add the numbers to the back of the number
+    setCurrentNum((prevCurrentNum) => prevCurrentNum + value);
+    return;
   };
 
-  // apply an operation inBetween numbers
+  // Watch changes for history
+  // If there's a selected OP. set the History
+  useEffect(
+    (value) => {
+      if (selectedOperation) {
+        // since there's a selected operation now -
+        // and the currentNum has moved to the prevNum -
+        // set the current num to empty
+        setCurrentNum("");
+        // then set the history to the prevNum (which has the initial currentNum's value) and the selected op. sign
+        setHistoryLog((prevHistoryLog) => `${prevNum} ${selectedOperation}`);
+      }
+    },
+    [selectedOperation, prevNum]
+  );
+
   const applyOperation = (value) => {
+    // console.log(` You called ${value}`);
     setPrevNum(currentNum);
-    // setCurrentNum("")
+    // This is what tirggers the useEffect
+    // Since the selected Op. is now 'true' or has a value
     setSelectedOperation(value);
   };
 
-  const calculate = () => {
-    const operationMap = {
-      "*": (a, b) => a * b,
-      "+": (a, b) => a + b,
-      "-": (a, b) => a - b,
-      "%": (a, b) => a % b,
-    };
-
-    const operation = operationMap[selectedOperation];
-    if (!operation) {
-      alert(`Operation ${selectedOperation} is not yet supported 🙃`);
-    }
-
-    const result = operation(parseFloat(prevNum), parseFloat(currentNum));
-    setPrevNum(result);
-    setCurrentNum(result)
+  // Handle Input Change
+  // Watches every user input and sets it to the value of the input
+  // Value is controle by button and keyboard.
+  const handleChange = (e) => {
+    e.preventDefault();
+    setCurrentNum(e.target.value);
   };
+
+  const calculate = () => {
+    if (prevNum && selectedOperation && currentNum) {
+      const operationMap = {
+        "+": (a, b) => a + b,
+        "-": (a, b) => a - b,
+        "/": (a, b) => a / b,
+        "*": (a, b) => a * b,
+        "%": (a, b) => a % b,
+      };
+
+      const operations = operationMap[selectedOperation];
+
+      if (!operations) {
+        alert("That guy isn't supported yet 🙃");
+        return;
+      }
+
+      const result = operations(parseFloat(prevNum), parseFloat(currentNum));
+      return setCurrentNum(result);
+    } else {
+      alert("Oshey, QA Tester😼");
+    }
+  };
+
+//   const handleKeydown = (e) => {
+//     handleKeyPress(e.key);
+// }
+
+// useEffect(() => window.addEventListener('keydown', handleKeydown)
+// );
+
+  // console.log(
+  //   `Previous number is "${prevNum}" operation is "${selectedOperation}" and Current Number is "${currentNum}" also, Result is "coming here"`
+  // );
 
   return (
     <section className="calculator-wrapper">
       <div className="input-container">
         <div className="cache">
-          <h4 className="cache--text"> {history} </h4>
+          <h4 className="cache--text"> {historyLog} </h4>
         </div>
         <input
           placeholder="0"
-          onChange={(e) => setCurrentNum(e.target.value)}
+          onChange={handleChange}
+          onKeyPress={handleKeyPress}
           value={currentNum}
-          defaultValue={currentNum}
           className="cal-input"
-          type="disabled"
+          type="text"
           name="calculator-number-input"
           id="calculator-input"
+          inputmode="decimal"
+          // readonly="readonly"
+          // autoFocus={true}
         />
       </div>
+      
 
       <section className="calculator">
         <div className="buttons">
@@ -113,7 +204,7 @@ export default function Calculator() {
           <button onClick={() => pressed("9")}>9</button>
           <button onClick={() => pressed("-")}>&#8722;</button>
 
-          <button onClick={() => pressed(".")}>.</button>
+          <button id="dot-button" onClick={() => pressed(".")}>.</button>
           <button onClick={() => pressed("0")}>0</button>
           <button onClick={() => pressed("000")}>000</button>
           <button onClick={() => pressed("=")}>&#61;</button>

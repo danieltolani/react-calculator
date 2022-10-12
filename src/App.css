@@ -70,9 +70,9 @@ h4.cache--text{
   padding-right: 1em;
   border-radius: 6px 6px 0 0;
   border: none;
-  background-color: #5884b62f;
+  background-color: #21272F;
   font-weight: 900;
-
+  caret-color: transparent;
 }
 
 .cal-input:focus{
@@ -92,6 +92,7 @@ section.calculator{
   display: grid;
   grid-template-columns: 1fr 1fr 1fr 1fr;
   grid-gap: 0.3em;
+  white-space: nowrap;
 }
 
 button{
@@ -114,11 +115,6 @@ button:nth-child(16) {
 
 }
 
-button:hover{
-  color: #555;
-}
-
-
 
 button:nth-child(20) {
   background-color: #7FF4ED;;;
@@ -126,20 +122,11 @@ button:nth-child(20) {
   /* font-size: 1.6rem; */
 }
 
-button:nth-child(20):hover {
-  background-color: rgb(15, 13, 18);
-  color: #7FF4ED;
-  
-}
-
 button:nth-child(1){
-  color: #9C7443;
-  
+  color: #f9ad4f;
 }
 
-button:nth-child(1):hover{
-  color: #555;
-}
+
 
 /* button{
     text-align: center;
@@ -150,3 +137,95 @@ button:nth-child(1):hover{
     cursor: pointer;
     padding: 2em;
 } */
+
+
+@media (max-width: 490px) {
+
+      html,body{
+        overflow: hidden;
+        /* border: 14px solid yellow; */
+      }
+
+      .main-app{
+        position: fixed;
+        top: 0;
+        border-top: 0;
+        display: flex;
+        align-items: center;
+      }
+      section.container {
+        min-width: 100%;
+        position: fixed;
+        top: 0;
+        bottom: 0;
+        /* margin: auto 0; */
+        /* position: fixed;
+        top: 0;
+        border-top: 0; */
+      }
+      section.calculator{
+        min-width: 100%;
+        padding: 12px;
+        border: 0;
+        border-top: 2px solid #7FF4ED;
+        padding-top: 1.4em;
+
+        /* overflow: ; */
+      }
+
+      button{
+        padding-left: 0 !important;
+        padding-right: 0 !important;
+        padding-top: 16px;
+        padding-bottom: 16px;
+        font-size: 2rem;
+      }
+
+      .buttons{
+        /* grid-gap: 1.2em; */
+        min-width: 0;
+        grid-template-columns: repeat(4,1fr);
+      }
+
+      .cal-input{
+        font-size: 3rem;
+        padding-right: 0.5em;
+        padding-top: 0.6em;
+        /* height: 100%; */
+
+      }
+
+      .input-container{
+        /* height: 12.5rem; */
+        padding-top: 3.5rem;
+        background-color: #21272F;
+        
+      }
+
+      .cache{
+        top: auto;
+        padding-top: 1.8em;
+
+      }
+      button#dot-button{
+        padding-top: 0px;
+      }
+}
+
+@media (hover:hover) and (pointer:fine){
+
+  button:hover{
+    color: #555;
+  }
+  
+  button:nth-child(1):hover{
+    color: #555;
+  }
+
+  button:nth-child(20):hover {
+    background-color: rgb(15, 13, 18);
+    color: #7FF4ED;
+  }
+
+
+}
