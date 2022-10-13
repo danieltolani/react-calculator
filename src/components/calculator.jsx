@@ -138,14 +138,14 @@ export default function Calculator() {
       const operations = operationMap[selectedOperation];
 
       if (!operations) {
-        alert("That guy isn't supported yet 🙃");
+        alert("That function isn't supported yet 🙃");
         return;
       }
 
       const result = operations(parseFloat(prevNum), parseFloat(currentNum));
       return setCurrentNum(result);
     } else {
-      alert("Oshey, QA Tester😼");
+      alert("Yikes, its an Invalid Operation😼");
     }
   };
 
